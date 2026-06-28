@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Empire Supplier Hub — Acceso VIP a Proveedores Premium</title>
+  <meta name="description" content="Accede hoy a la red exclusiva de proveedores VIP. Precios de mayorista en sneakers, perfumes, tech y más. Oferta de lanzamiento: 50% de descuento.">
+  <meta name="theme-color" content="#06080d">
+  <link rel="stylesheet" href="style.css">
+  <!-- DNS Prefetch + Preconnect Google Fonts -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap">
+  <!-- Preload hero image for faster LCP -->
+  <link rel="preload" as="image" href="images/hero_network.png">
+</head>
+<body>
+
+  <!-- ============ ANNOUNCEMENT BAR (FIXED TOP) ============ -->
+  <div class="announce-bar" id="announce-bar">
+    <div class="announce-bar__inner">
+      <div class="announce-bar__left">
+        <span class="announce-bar__dot"></span>
+        <span class="announce-bar__tag">OFERTA FLASH</span>
+      </div>
+      <p class="announce-bar__message">
+        Únete ahora y obtén un <strong>50% DE DESCUENTO</strong> en tu acceso VIP
+      </p>
+
+      <a href="#godmode" class="announce-bar__cta">Desbloquear Ahora</a>
+    </div>
+  </div>
+
+  <!-- ============ FLOATING CART ============ -->
+  <div class="floating-cart" id="floating-cart">
+    <span class="floating-cart__icon">🛒</span>
+    <span class="floating-cart__count" id="cart-count">0</span>
+    <span class="floating-cart__total" id="cart-total">0,00€</span>
+  </div>
+
+  <!-- ============ AMBIENT EFFECTS ============ -->
+  <div class="bg-particles" aria-hidden="true"></div>
+  <div class="ambient-glow green" aria-hidden="true"></div>
+  <div class="ambient-glow cyan" aria-hidden="true"></div>
+
+  <!-- ============ SECTION 1: HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <img src="images/hero_network.png" alt="Red global 3D con partículas de luz" loading="eager">
+    </div>
+
+    <div class="hero__content">
+      <span class="hero__badge">
+        Empire Supplier Hub
+      </span>
+
+      <h1 class="hero__title">
+        Crea tu <span class="highlight-green">Imperio</span> de Reventa
+        <span class="highlight-cyan">HOY.</span><br>
+        Acceso Directo a los Proveedores VIP.
+      </h1>
+
+      <p class="hero__subtitle">
+        Únete a la red exclusiva de revendedores que acceden a precios de mayorista en las categorías más rentables del mercado.
+      </p>
+
+
+
+      <!-- CTA -->
+      <a href="#godmode" class="cta-btn" id="cta-hero">
+        🔓 DESBLOQUEAR ACCESO VIP
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2: CATALOG ============ -->
+  <section class="catalog" id="catalog">
+    <div class="section-header reveal">
+      <span class="section-label">Catálogo Exclusivo</span>
+      <h2 class="section-title">Productos VIP con<br>Márgenes Reales</h2>
+    </div>
+
+    <div class="catalog__grid">
+
+      <!-- Card 1: Facturas de Tickets -->
+      <article class="product-card reveal" id="card-tickets">
+        <span class="product-card__badge product-card__badge--red">-40% HOY</span>
+        <span class="product-card__scarcity" title="Pocas unidades"></span>
+        <img class="product-card__image" src="images/tickets_paper.png" alt="Facturas de Tickets" loading="lazy">
+        <div class="product-card__info">
+          <h3 class="product-card__name">Facturas de Tickets</h3>
+          <div class="product-card__pricing">
+            <span class="product-card__price-old">16,99€</span>
+            <span class="product-card__price">9,99€</span>
+          </div>
+          <button class="product-card__cart-btn" data-product="Facturas de Tickets" data-price="9.99">
+            🛒 Añadir
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 2: Accesorios -->
+      <article class="product-card product-card--layered reveal" id="card-accessories">
+        <span class="product-card__badge product-card__badge--orange">Stock Limitado</span>
+        <span class="product-card__scarcity" title="Pocas unidades"></span>
+        <div class="product-card__layered-wrap" style="background:#000;">
+          <img class="product-card__image product-card__image--bg" src="images/accessories_gold.png" alt="" loading="lazy" style="z-index:0; opacity: 0.8;">
+          <!-- Glowing black portal to blend the watch's black background into the abstract gold -->
+          <div style="position:absolute; inset:0; z-index:1; background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0) 80%); pointer-events:none;"></div>
+          <!-- Real Watch with screen blend, bigger scale, and softer fade -->
+          <img class="product-card__image product-card__image--product" src="images/watch_new.png" alt="Accesorios premium" loading="lazy" style="mix-blend-mode: screen; width:100%; height:100%; object-fit: contain; transform: scale(1.4); z-index:2; position:relative; pointer-events:none; filter: contrast(1.1) brightness(1.15); -webkit-mask-image: radial-gradient(circle at 50% 50%, black 45%, transparent 80%); mask-image: radial-gradient(circle at 50% 50%, black 45%, transparent 80%);">
+        </div>
+        <div class="product-card__info">
+          <h3 class="product-card__name">Accesorios</h3>
+          <div class="product-card__pricing">
+            <span class="product-card__price-old">19,99€</span>
+            <span class="product-card__price">9,99€</span>
+          </div>
+          <button class="product-card__cart-btn" data-product="Accesorios" data-price="9.99">
+            🛒 Añadir
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 3: Vapers -->
+      <article class="product-card product-card--layered reveal" id="card-vapers">
+        <span class="product-card__badge product-card__badge--cyan">Top Ventas</span>
+        <span class="product-card__scarcity" title="Pocas unidades"></span>
+        <div class="product-card__layered-wrap" style="background:#000;">
+          <img class="product-card__image product-card__image--bg" src="images/vapers_smoke.png" alt="" loading="lazy" style="z-index:0; opacity: 0.7;">
+          <!-- Glowing white portal to blend the vaper's white background into the abstract smoke -->
+          <div style="position:absolute; inset:0; z-index:1; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 40%, rgba(255,255,255,0) 75%); pointer-events:none;"></div>
+          <!-- Real Vaper with multiply blend -->
+          <img class="product-card__image product-card__image--product" src="images/vaper_user.png" alt="Vapers" loading="lazy" style="mix-blend-mode: multiply; width:100%; height:100%; object-fit: contain; transform: scale(1.1) translateY(5%); z-index:2; position:relative; pointer-events:none; filter: contrast(1.1);">
+        </div>
+        <div class="product-card__info">
+          <h3 class="product-card__name">Vapers</h3>
+          <div class="product-card__pricing">
+            <span class="product-card__price-old">14,99€</span>
+            <span class="product-card__price">9,99€</span>
+          </div>
+          <button class="product-card__cart-btn" data-product="Vapers" data-price="9.99">
+            🛒 Añadir
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 4: Ropa Premium -->
+      <article class="product-card product-card--layered reveal" id="card-clothing">
+        <span class="product-card__badge product-card__badge--gold">Últimos accesos</span>
+        <span class="product-card__scarcity" title="Pocas unidades"></span>
+        <div class="product-card__layered-wrap">
+          <img class="product-card__image product-card__image--bg" src="images/ropa_premium.png" alt="" loading="lazy">
+          <img class="product-card__image product-card__image--product" src="images/sudadera_real.png" alt="Ropa Premium - Sudadera" loading="lazy">
+        </div>
+        <div class="product-card__info">
+          <h3 class="product-card__name">Ropa Premium</h3>
+          <div class="product-card__pricing">
+            <span class="product-card__price-old">24,99€</span>
+            <span class="product-card__price">9,99€</span>
+          </div>
+          <button class="product-card__cart-btn" data-product="Ropa Premium" data-price="9.99">
+            🛒 Añadir
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 5: Sneakers -->
+      <article class="product-card reveal" id="card-sneakers">
+        <span class="product-card__badge product-card__badge--red">Alta demanda</span>
+        <span class="product-card__scarcity" title="Pocas unidades"></span>
+        <img class="product-card__image" src="images/sneakers_explosion.png" alt="Sneakers" loading="lazy">
+        <div class="product-card__info">
+          <h3 class="product-card__name">Sneakers</h3>
+          <div class="product-card__pricing">
+            <span class="product-card__price-old">19,99€</span>
+            <span class="product-card__price">9,99€</span>
+          </div>
+          <button class="product-card__cart-btn" data-product="Sneakers" data-price="9.99">
+            🛒 Añadir
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 6: Perfumes -->
+      <article class="product-card reveal" id="card-perfumes">
+        <span class="product-card__badge product-card__badge--green">Exclusivo</span>
+        <span class="product-card__scarcity" title="Pocas unidades"></span>
+        <img class="product-card__image" src="images/perfumes_drops.png" alt="Perfumes" loading="lazy">
+        <div class="product-card__info">
+          <h3 class="product-card__name">Perfumes</h3>
+          <div class="product-card__pricing">
+            <span class="product-card__price-old">17,99€</span>
+            <span class="product-card__price">9,99€</span>
+          </div>
+          <button class="product-card__cart-btn" data-product="Perfumes" data-price="9.99">
+            🛒 Añadir
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 7: AirPods & Tech -->
+      <article class="product-card product-card--layered reveal" id="card-tech">
+        <span class="product-card__badge product-card__badge--red">-30% Descuento</span>
+        <span class="product-card__scarcity" title="Pocas unidades"></span>
+        <div class="product-card__layered-wrap" style="background:#000;">
+          <div class="product-card__image-placeholder tech" style="position:absolute; inset:0; z-index:0;"></div>
+          <!-- Glowing black portal to blend the airpods' black background into the abstract core -->
+          <div style="position:absolute; inset:0; z-index:1; background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0) 65%); pointer-events:none;"></div>
+          <!-- Real AirPods lowered -->
+          <img class="product-card__image product-card__image--product" src="images/airpods_new.png" alt="AirPods" loading="lazy" style="mix-blend-mode: screen; width:100%; height:100%; object-fit: contain; transform: scale(1.2) translateY(12%); z-index:2; position:relative; pointer-events:none; filter: brightness(1.15) contrast(1.2); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 60%, transparent 90%); mask-image: radial-gradient(ellipse at 50% 50%, black 60%, transparent 90%);">
+        </div>
+        <div class="product-card__info">
+          <h3 class="product-card__name">AirPods & Tech</h3>
+          <div class="product-card__pricing">
+            <span class="product-card__price-old">14,99€</span>
+            <span class="product-card__price">9,99€</span>
+          </div>
+          <button class="product-card__cart-btn" data-product="AirPods & Tech" data-price="9.99">
+            🛒 Añadir
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ SECTION: TESTIMONIALS ============ -->
+  <section class="testimonials" id="reviews">
+    <div class="section-header reveal">
+      <span class="section-label">Comunidad Global</span>
+      <h2 class="section-title">Lo que dicen nuestros<br><span class="highlight-cyan">Proveedores y Revendedores</span></h2>
+    </div>
+    
+    <div class="testimonials__grid">
+      <!-- Review 1 -->
+      <div class="review-card reveal">
+        <div class="review-card__header">
+          <div class="review-card__avatar">RJ</div>
+          <div class="review-card__user-info">
+            <h4 class="review-card__name">Rafael J. (Madrid)</h4>
+            <span class="review-card__verified">✅ Comprador Verificado</span>
+          </div>
+          <div class="review-card__rating">⭐⭐⭐⭐⭐</div>
+        </div>
+        <p class="review-card__text">"esta pajina es de lo mejor la berdad q dan mucha konfianza pa compra online me llego todo flama y sin fallos bamos q podéis fiaros de eyos 100 por cien"</p>
+      </div>
+
+      <!-- Review 2 -->
+      <div class="review-card reveal">
+        <div class="review-card__header">
+          <div class="review-card__avatar">SM</div>
+          <div class="review-card__user-info">
+            <h4 class="review-card__name">Sofía M. (Valencia)</h4>
+            <span class="review-card__verified">✅ Comprador Verificado</span>
+          </div>
+          <div class="review-card__rating">⭐⭐⭐⭐⭐</div>
+        </div>
+        <p class="review-card__text">"Comprar aquí me da mucha tranquilidad porque son muy claras y profesionales. Me he sentido muy segura durante todo el proceso, volveré a pedir seguro."</p>
+      </div>
+
+      <!-- Review 3 -->
+      <div class="review-card reveal">
+        <div class="review-card__header">
+          <div class="review-card__avatar">LK</div>
+          <div class="review-card__user-info">
+            <h4 class="review-card__name">Lucas K. (Barcelona)</h4>
+            <span class="review-card__verified">✅ Comprador Verificado</span>
+          </div>
+          <div class="review-card__rating">⭐⭐⭐⭐✨</div>
+        </div>
+        <p class="review-card__text">"La web transmite mucha seguridad y el pedido llegó perfecto."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3: GOD MODE ============ -->
+  <section class="godmode" id="godmode">
+    <div class="godmode__visual reveal">
+      <div class="godmode__sphere"></div>
+      <div class="godmode__ring"></div>
+      <div class="godmode__ring"></div>
+    </div>
+
+    <div class="godmode__glass reveal">
+      <p class="godmode__label">⚡ Modo Dios Activado</p>
+
+      <h2 class="godmode__title">
+        📦 EL PACK DEFINITIVO:<br>TODO-EN-UNO
+      </h2>
+
+      <div class="godmode__price">
+        <span class="godmode__price-old">99€</span>
+        <span class="godmode__price-new">29€</span>
+        <span class="godmode__price-label">Acceso completo a las 7 categorías + actualizaciones de por vida</span>
+      </div>
+
+      <p class="godmode__scarcity">
+        🔴 Solo quedan <strong id="license-count">7</strong> licencias disponibles para hoy
+      </p>
+
+      <div class="godmode__social">
+        🔥 <span id="viewer-count">24</span> personas están viendo este pack ahora mismo
+      </div>
+
+      <ul class="godmode__features">
+        <li><span class="check">✅</span> Acceso a los 7 catálogos VIP completos</li>
+        <li><span class="check">✅</span> Lista de proveedores verificados con contacto directo</li>
+        <li><span class="check">✅</span> Guía de márgenes y cálculo de beneficios</li>
+        <li><span class="check">✅</span> Actualizaciones semanales de nuevos proveedores</li>
+        <li><span class="check">✅</span> Soporte prioritario por Instagram</li>
+        <li><span class="check">✅</span> Comunidad privada de revendedores</li>
+      </ul>
+
+      <div class="final__countdown-wrap reveal" style="margin-top: 30px;">
+        <p class="final__countdown-label" style="font-size: 0.85rem; letter-spacing: 2px;">⏳ LA OFERTA EXPIRA EN</p>
+        <div class="final__countdown" style="margin-bottom: 20px;">
+          <div class="final__countdown-block">
+            <span class="final__countdown-num" id="final-hours">01</span>
+            <span class="final__countdown-unit">HORAS</span>
+          </div>
+          <div class="final__countdown-block">
+            <span class="final__countdown-num" id="final-minutes">59</span>
+            <span class="final__countdown-unit">MIN</span>
+          </div>
+          <div class="final__countdown-block">
+            <span class="final__countdown-num" id="final-seconds">59</span>
+            <span class="final__countdown-unit">SEG</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="final__cta-btn reveal" id="cta-final" style="width: 100%; border:none; cursor:pointer;">
+        💳 COMPRAR AHORA — PRECIO REBAJADO
+      </button>
+
+      <p class="final__guarantee reveal" style="font-size: 0.8rem; margin-top: 15px; color: var(--text-muted); text-align: center;">
+        🔒 Pago seguro &nbsp;·&nbsp; Acceso instantáneo &nbsp;·&nbsp; Sin suscripción
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: CONTACT ============ -->
+  <section class="contact-section" id="contact">
+    <div class="section-header reveal">
+      <span class="section-label">Soporte Directo</span>
+      <h2 class="section-title">¿Tienes dudas? <span class="highlight-green">Hablemos.</span></h2>
+    </div>
+    <div class="contact__container reveal">
+      <div class="contact__info">
+        <p>Contacta con nuestro equipo 24/7 para cualquier pregunta sobre los accesos, pagos o proveedores.</p>
+        <a href="mailto:empire.supplier.hub@gmail.com" class="contact__email">
+          <span class="emoji">✉️</span> empire.supplier.hub@gmail.com
+        </a>
+      </div>
+      <form class="contact__form" id="contact-form">
+        <input type="text" placeholder="Tu Nombre" required class="contact__input">
+        <input type="email" placeholder="Tu Email" required class="contact__input">
+        <input type="text" placeholder="Asunto" required class="contact__input">
+        <textarea placeholder="Tu Mensaje..." required class="contact__input contact__textarea"></textarea>
+        <button type="submit" class="contact__submit-btn">ENVIAR MENSAJE</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4: FOOTER & FINAL ============ -->
+  <section class="final" id="final">
+    <div class="payment-methods reveal">
+      <p class="payment-methods__title">MÉTODOS DE PAGO SEGUROS ENCRIPTADOS 🔒</p>
+      <div class="payment-methods__icons">
+        <span class="pay-icon" title="Visa">💳 Visa</span>
+        <span class="pay-icon" title="Mastercard">💳 Mastercard</span>
+        <span class="pay-icon" title="Amex">💳 AMEX</span>
+        <span class="pay-icon" title="Apple Pay">🍏 Apple Pay</span>
+        <span class="pay-icon" title="Google Pay">🇬 Google Pay</span>
+      </div>
+    </div>
+    
+    <div class="footer-links reveal">
+      <a href="privacy.html" class="footer-links__item">Política de Privacidad</a>
+    </div>
+  </section>
+
+  <!-- ============ POP-UP NOTIFICATIONS ============ -->
+  <div class="popup-container" aria-live="polite"></div>
+
+  <!-- ============ FLOATING REVIEWS ============ -->
+  <div class="review-container" id="review-container" aria-live="polite"></div>
+
+  <!-- ============ SIDE CART ============ -->
+  <div class="side-cart-overlay" id="side-cart-overlay"></div>
+  <aside class="side-cart" id="side-cart">
+    <div class="side-cart__header">
+      <h3>Tu Carrito</h3>
+      <button class="side-cart__close" id="side-cart-close" aria-label="Cerrar carrito">✖</button>
+    </div>
+    <div class="side-cart__items" id="side-cart-items">
+      <!-- Items will be dynamically injected here -->
+      <div class="side-cart__empty">El carrito está vacío.</div>
+    </div>
+    <div class="side-cart__footer">
+
+      <div class="side-cart__subtotal">
+        <span>Subtotal</span>
+        <span id="side-cart-subtotal">0,00€</span>
+      </div>
+      <button class="side-cart__checkout-btn">
+        🔒 FINALIZAR COMPRA DE FORMA SEGURA
+      </button>
+      
+      <div class="payment-methods payment-methods--cart">
+        <div class="payment-methods__icons">
+          <span class="pay-icon" title="Visa">💳</span>
+          <span class="pay-icon" title="Mastercard">💳</span>
+          <span class="pay-icon" title="Apple Pay">🍏</span>
+          <span class="pay-icon" title="Google Pay">🇬</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ TOAST REVIEWS ============ -->
+  <div id="toast-reviews-container" aria-live="polite"></div>
+
+  <!-- JS Engine -->
+  <script src="script.js"></script>
+</body>
+</html>
