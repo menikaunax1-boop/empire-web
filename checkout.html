@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Seguro — Empire Supplier Hub</title>
+  <meta name="theme-color" content="#06080d">
+  <link rel="stylesheet" href="style.css">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap">
+</head>
+<body class="checkout-page">
+  <div class="bg-particles" aria-hidden="true"></div>
+  <div class="ambient-glow cyan" aria-hidden="true"></div>
+
+  <header class="checkout-header">
+    <a href="index.html" class="checkout-back">← Volver al inicio</a>
+    <h1 style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff;">Finalizar Compra 🔒</h1>
+  </header>
+
+  <div class="container checkout-container">
+    <div class="checkout-grid">
+      
+      <!-- Summary (ahora primero) -->
+      <div class="checkout-col checkout-summary-panel glass-panel">
+        <h2 class="checkout-section-title">Resumen de Pedido</h2>
+        <div class="checkout-items" id="checkout-items-list">
+          <!-- Items injected via JS -->
+        </div>
+        
+        <!-- Contenedor del código de descuento -->
+        <div class="checkout-discount-box" style="display: flex; gap: 8px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border);">
+          <input type="text" placeholder="Código de Descuento" class="contact__input" id="checkout-discount-input" style="flex:1;">
+          <button type="button" class="discount-btn" id="checkout-apply-discount" style="background: rgba(0, 240, 255, 0.1); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); font-weight: 800; border-radius: var(--radius-sm); padding: 0 16px; cursor: pointer; transition: 0.2s;">APLICAR</button>
+        </div>
+
+        <div class="checkout-totals">
+          <div class="checkout-total-row">
+            <span>Subtotal</span>
+            <span id="checkout-subtotal">0,00€</span>
+          </div>
+          <div class="checkout-total-row">
+            <span>Impuestos y Envío</span>
+            <span style="color:var(--text-muted); font-size:0.8rem;">Calculado al final</span>
+          </div>
+          <div class="checkout-total-row grand-total">
+            <span>Total a pagar</span>
+            <span id="checkout-total">0,00€</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form (ahora segundo) -->
+      <div class="checkout-col checkout-form-panel glass-panel">
+        <h2 class="checkout-section-title">Datos de Envío y Facturación</h2>
+        <form id="secure-checkout-form">
+          <input type="email" name="email" placeholder="Correo electrónico (Ej. tu@gmail.com)" required class="contact__input" style="margin-bottom: 12px;">
+          <div class="form-row">
+            <input type="text" name="nombre" placeholder="Nombre completo" required class="contact__input">
+            <input type="text" name="apellidos" placeholder="Apellidos" required class="contact__input">
+          </div>
+          <input type="text" name="direccion" placeholder="Dirección de envío completa" required class="contact__input" style="margin-bottom: 12px;">
+          <div class="form-row">
+            <input type="text" name="ciudad" placeholder="Ciudad" required class="contact__input">
+            <input type="text" name="codigo_postal" placeholder="Código Postal (Ej. 28001)" required pattern="[0-9]{5}" title="Debe contener 5 dígitos numéricos" class="contact__input" id="zipcode-input">
+          </div>
+          <input type="tel" name="telefono" placeholder="Teléfono móvil" required class="contact__input" style="margin-bottom: 24px;">
+
+          <h2 class="checkout-section-title mt-4">Método de Pago</h2>
+          <div class="checkout-payment-methods">
+            <label class="payment-radio">
+              <input type="radio" name="payment_method" value="card" checked>
+              <span class="radio-label">💳 Tarjeta de Crédito/Débito</span>
+            </label>
+            <label class="payment-radio">
+              <input type="radio" name="payment_method" value="apple_pay">
+              <span class="radio-label">🍏 Apple Pay</span>
+            </label>
+            <label class="payment-radio">
+              <input type="radio" name="payment_method" value="google_pay">
+              <span class="radio-label">🇬 Google Pay</span>
+            </label>
+          </div>
+
+          <div id="card-details-box" class="card-details-box">
+            <input type="text" name="cc_numero" placeholder="Número de tarjeta (16 dígitos)" required pattern="\s*[0-9]{4}\s*[0-9]{4}\s*[0-9]{4}\s*[0-9]{4}\s*" title="Formato inválido" class="contact__input" id="cc-number">
+            <div class="form-row" style="margin-bottom:0;">
+              <input type="text" name="cc_expiry" placeholder="MM/AA" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Mes y año MM/AA" class="contact__input">
+              <input type="text" name="cc_cvc" placeholder="CVC" required pattern="[0-9]{3,4}" title="Código CVC" class="contact__input">
+            </div>
+          </div>
+
+          <button type="submit" class="checkout-pay-btn" style="margin-top: 24px;">Pagar ahora</button>
+          
+          <div class="trust-symbols">
+            <span>✅ SSL 256-bit Encriptado</span>
+            <span>✅ Cumple PCI-DSS</span>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="checkout-footer">
+    <p style="color:var(--text-muted); margin-bottom:8px;">¿Problemas con el pago? Contáctanos 24/7</p>
+    <a href="mailto:empire.supplier.hub@gmail.com" class="contact__email" style="font-size:0.85rem;">
+      <span class="emoji">✉️</span> empire.supplier.hub@gmail.com
+    </a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
