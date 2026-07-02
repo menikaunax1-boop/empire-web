@@ -10,6 +10,51 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap">
+  <!-- SDK oficial de Stripe — OBLIGATORIO antes de tu script -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    /* ── Stripe Card Element — hereda el estilo de tu web ── */
+    #stripe-card-element {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,240,255,0.2);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    #stripe-card-element.StripeElement--focus {
+      border-color: var(--neon-cyan, #00f0ff);
+      box-shadow: 0 0 0 2px rgba(0,240,255,0.15);
+    }
+    #stripe-card-element.StripeElement--invalid {
+      border-color: #ff4d4d;
+    }
+    #card-errors {
+      color: #ff4d4d;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      min-height: 18px;
+    }
+    #discount-msg {
+      font-size: 0.85rem;
+      margin-top: 6px;
+      min-height: 18px;
+    }
+    #discount-msg.ok  { color: #00f0ff; }
+    #discount-msg.err { color: #ff4d4d; }
+    .checkout-pay-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #pay-status {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.9rem;
+      min-height: 20px;
+    }
+    #pay-status.ok  { color: #00f0ff; }
+    #pay-status.err { color: #ff4d4d; }
+  </style>
 </head>
 <body class="checkout-page">
   <div class="bg-particles" aria-hidden="true"></div>
@@ -22,28 +67,33 @@
 
   <div class="container checkout-container">
     <div class="checkout-grid">
-      
-      <!-- Summary (ahora primero) -->
+
+      <!-- Resumen de pedido -->
       <div class="checkout-col checkout-summary-panel glass-panel">
         <h2 class="checkout-section-title">Resumen de Pedido</h2>
         <div class="checkout-items" id="checkout-items-list">
-          <!-- Items injected via JS -->
+          <!-- Items inyectados por JS -->
         </div>
-        
-        <!-- Contenedor del código de descuento -->
-        <div class="checkout-discount-box" style="display: flex; gap: 8px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border);">
+
+        <!-- Código de descuento -->
+        <div class="checkout-discount-box" style="display:flex;gap:8px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--glass-border);">
           <input type="text" placeholder="Código de Descuento" class="contact__input" id="checkout-discount-input" style="flex:1;">
-          <button type="button" class="discount-btn" id="checkout-apply-discount" style="background: rgba(0, 240, 255, 0.1); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); font-weight: 800; border-radius: var(--radius-sm); padding: 0 16px; cursor: pointer; transition: 0.2s;">APLICAR</button>
+          <button type="button" class="discount-btn" id="checkout-apply-discount" style="background:rgba(0,240,255,0.1);border:1px solid var(--neon-cyan);color:var(--neon-cyan);font-weight:800;border-radius:var(--radius-sm);padding:0 16px;cursor:pointer;transition:0.2s;">APLICAR</button>
         </div>
+        <div id="discount-msg"></div>
 
         <div class="checkout-totals">
           <div class="checkout-total-row">
             <span>Subtotal</span>
             <span id="checkout-subtotal">0,00€</span>
           </div>
+          <div class="checkout-total-row" id="discount-row" style="display:none;">
+            <span>Descuento (STAYHARD)</span>
+            <span id="checkout-discount-amount" style="color:#00f0ff;">-0,00€</span>
+          </div>
           <div class="checkout-total-row">
             <span>Impuestos y Envío</span>
-            <span style="color:var(--text-muted); font-size:0.8rem;">Calculado al final</span>
+            <span style="color:var(--text-muted);font-size:0.8rem;">Incluidos</span>
           </div>
           <div class="checkout-total-row grand-total">
             <span>Total a pagar</span>
@@ -52,51 +102,42 @@
         </div>
       </div>
 
-      <!-- Form (ahora segundo) -->
+      <!-- Formulario -->
       <div class="checkout-col checkout-form-panel glass-panel">
         <h2 class="checkout-section-title">Datos de Envío y Facturación</h2>
-        <form id="secure-checkout-form">
-          <input type="email" name="email" placeholder="Correo electrónico (Ej. tu@gmail.com)" required class="contact__input" style="margin-bottom: 12px;">
+        <form id="secure-checkout-form" autocomplete="on">
+          <input type="email" name="email" placeholder="Correo electrónico (Ej. tu@gmail.com)" required class="contact__input" style="margin-bottom:12px;" autocomplete="email">
           <div class="form-row">
-            <input type="text" name="nombre" placeholder="Nombre completo" required class="contact__input">
-            <input type="text" name="apellidos" placeholder="Apellidos" required class="contact__input">
+            <input type="text" name="nombre" placeholder="Nombre" required class="contact__input" autocomplete="given-name">
+            <input type="text" name="apellidos" placeholder="Apellidos" required class="contact__input" autocomplete="family-name">
           </div>
-          <input type="text" name="direccion" placeholder="Dirección de envío completa" required class="contact__input" style="margin-bottom: 12px;">
+          <input type="text" name="direccion" placeholder="Dirección de envío completa" required class="contact__input" style="margin-bottom:12px;" autocomplete="street-address">
           <div class="form-row">
-            <input type="text" name="ciudad" placeholder="Ciudad" required class="contact__input">
-            <input type="text" name="codigo_postal" placeholder="Código Postal (Ej. 28001)" required pattern="[0-9]{5}" title="Debe contener 5 dígitos numéricos" class="contact__input" id="zipcode-input">
+            <input type="text" name="ciudad" placeholder="Ciudad" required class="contact__input" autocomplete="address-level2">
+            <input type="text" name="codigo_postal" placeholder="Código Postal (Ej. 28001)" required pattern="[0-9]{5}" title="5 dígitos numéricos" class="contact__input" autocomplete="postal-code">
           </div>
-          <input type="tel" name="telefono" placeholder="Teléfono móvil" required class="contact__input" style="margin-bottom: 24px;">
+          <input type="tel" name="telefono" placeholder="Teléfono móvil" required class="contact__input" style="margin-bottom:24px;" autocomplete="tel">
 
           <h2 class="checkout-section-title mt-4">Método de Pago</h2>
-          <div class="checkout-payment-methods">
-            <label class="payment-radio">
-              <input type="radio" name="payment_method" value="card" checked>
-              <span class="radio-label">💳 Tarjeta de Crédito/Débito</span>
-            </label>
-            <label class="payment-radio">
-              <input type="radio" name="payment_method" value="apple_pay">
-              <span class="radio-label">🍏 Apple Pay</span>
-            </label>
-            <label class="payment-radio">
-              <input type="radio" name="payment_method" value="google_pay">
-              <span class="radio-label">🇬 Google Pay</span>
-            </label>
-          </div>
 
-          <div id="card-details-box" class="card-details-box">
-            <input type="text" name="cc_numero" placeholder="Número de tarjeta (16 dígitos)" required pattern="\s*[0-9]{4}\s*[0-9]{4}\s*[0-9]{4}\s*[0-9]{4}\s*" title="Formato inválido" class="contact__input" id="cc-number">
-            <div class="form-row" style="margin-bottom:0;">
-              <input type="text" name="cc_expiry" placeholder="MM/AA" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Mes y año MM/AA" class="contact__input">
-              <input type="text" name="cc_cvc" placeholder="CVC" required pattern="[0-9]{3,4}" title="Código CVC" class="contact__input">
-            </div>
-          </div>
+          <!-- Stripe Elements monta aquí la tarjeta de forma segura -->
+          <div id="stripe-card-element"></div>
+          <div id="card-errors" role="alert"></div>
 
-          <button type="submit" class="checkout-pay-btn" style="margin-top: 24px;">Pagar ahora</button>
-          
+          <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:20px;">
+            🔒 Pago procesado de forma segura por Stripe. Tus datos bancarios nunca pasan por nuestros servidores.
+          </p>
+
+          <button type="submit" class="checkout-pay-btn" id="pay-btn" style="margin-top:4px;">
+            Pagar ahora
+          </button>
+
+          <div id="pay-status"></div>
+
           <div class="trust-symbols">
             <span>✅ SSL 256-bit Encriptado</span>
             <span>✅ Cumple PCI-DSS</span>
+            <span>✅ Powered by Stripe</span>
           </div>
         </form>
       </div>
@@ -105,12 +146,255 @@
   </div>
 
   <footer class="checkout-footer">
-    <p style="color:var(--text-muted); margin-bottom:8px;">¿Problemas con el pago? Contáctanos 24/7</p>
+    <p style="color:var(--text-muted);margin-bottom:8px;">¿Problemas con el pago? Contáctanos 24/7</p>
     <a href="mailto:empire.supplier.hub@gmail.com" class="contact__email" style="font-size:0.85rem;">
       <span class="emoji">✉️</span> empire.supplier.hub@gmail.com
     </a>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+  // ============================================================
+  //  STRIPE CHECKOUT — Empire Supplier Hub
+  //  Backend: https://empire-backend1-production.up.railway.app
+  //  n8n:     https://unaxmenika.app.n8n.cloud/webhook/empire-hub
+  // ============================================================
+
+  const STRIPE_PK   = 'pk_test_51TmuixA717IXQo2sS3yfJoYQOd16Yg7uLNTN5p7wrsfKTHpx0It2kb9k3rvUeozEUiQFfs6btSUT2o6xuiKL5lFl00aK4KcF85'; // ← sustituye por tu pk_test_...
+  const BACKEND_URL = 'https://empire-backend1-production.up.railway.app';
+  const N8N_WEBHOOK = 'https://unaxmenika.app.n8n.cloud/webhook/empire-hub';
+
+  // Mapa de productos: nombre visible → productId del backend
+  const PRODUCT_MAP = {
+    'Facturas de Tickets': 'facturas_tickets',
+    'Accesorios':          'accesorios',
+    'Vapers':              'vapers',
+    'Ropa Premium':        'ropa_premium',
+    'Sneakers':            'sneakers',
+    'Perfumes':            'perfumes',
+    'AirPods & Tech':      'airpods_tech',
+    'Pack Definitivo Todo-en-Uno': 'pack_completo',
+  };
+
+  // ── Inicializar Stripe ────────────────────────────────────
+  const stripe   = Stripe(STRIPE_PK);
+  const elements = stripe.elements();
+  const cardElement = elements.create('card', {
+    style: {
+      base: {
+        fontSize: '15px',
+        color: '#ffffff',
+        fontFamily: 'Inter, sans-serif',
+        '::placeholder': { color: 'rgba(255,255,255,0.4)' },
+      },
+      invalid: { color: '#ff4d4d' },
+    },
+    hidePostalCode: true,
+  });
+  cardElement.mount('#stripe-card-element');
+
+  cardElement.on('change', ({ error }) => {
+    document.getElementById('card-errors').textContent = error ? error.message : '';
+  });
+
+  // ── Leer carrito del localStorage (lo gestiona script.js) ─
+  let carrito = [];
+  try {
+    carrito = JSON.parse(localStorage.getItem('cart') || '[]');
+  } catch(e) { carrito = []; }
+
+  let descuentoAplicado = false;
+  let codigoDescuento   = '';
+
+  // ── Renderizar resumen de pedido ──────────────────────────
+  function renderResumen() {
+    const lista    = document.getElementById('checkout-items-list');
+    const subtotal = carrito.reduce((s, i) => s + (i.price * (i.quantity || 1)), 0);
+    let total      = subtotal;
+
+    lista.innerHTML = carrito.map(item => `
+      <div class="checkout-item" style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--glass-border);">
+        <span>${item.name} ${item.quantity > 1 ? 'x' + item.quantity : ''}</span>
+        <span>${(item.price * (item.quantity || 1)).toFixed(2).replace('.', ',')}€</span>
+      </div>
+    `).join('');
+
+    document.getElementById('checkout-subtotal').textContent =
+      subtotal.toFixed(2).replace('.', ',') + '€';
+
+    if (descuentoAplicado) {
+      const descuento = subtotal * 0.15;
+      total = subtotal - descuento;
+      document.getElementById('discount-row').style.display = 'flex';
+      document.getElementById('checkout-discount-amount').textContent =
+        '-' + descuento.toFixed(2).replace('.', ',') + '€';
+    } else {
+      document.getElementById('discount-row').style.display = 'none';
+    }
+
+    document.getElementById('checkout-total').textContent =
+      total.toFixed(2).replace('.', ',') + '€';
+  }
+
+  renderResumen();
+
+  // ── Aplicar código de descuento ───────────────────────────
+  document.getElementById('checkout-apply-discount').addEventListener('click', async () => {
+    const codigo = document.getElementById('checkout-discount-input').value.trim();
+    const msg    = document.getElementById('discount-msg');
+
+    if (!codigo) {
+      msg.textContent = 'Introduce un código de descuento.';
+      msg.className   = 'err';
+      return;
+    }
+
+    try {
+      const res  = await fetch(`${BACKEND_URL}/validar-descuento`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ discountCode: codigo }),
+      });
+      const data = await res.json();
+
+      if (data.valid) {
+        descuentoAplicado = true;
+        codigoDescuento   = codigo;
+        msg.textContent   = `✅ ${data.description} aplicado`;
+        msg.className     = 'ok';
+        renderResumen();
+      } else {
+        descuentoAplicado = false;
+        codigoDescuento   = '';
+        msg.textContent   = '❌ Código no válido';
+        msg.className     = 'err';
+        renderResumen();
+      }
+    } catch(e) {
+      msg.textContent = '❌ Error al validar el código. Inténtalo de nuevo.';
+      msg.className   = 'err';
+    }
+  });
+
+  // ── Submit del formulario de pago ─────────────────────────
+  document.getElementById('secure-checkout-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (carrito.length === 0) {
+      setStatus('❌ Tu carrito está vacío.', 'err');
+      return;
+    }
+
+    const btn = document.getElementById('pay-btn');
+    btn.disabled     = true;
+    btn.textContent  = '⏳ Procesando...';
+    setStatus('', '');
+
+    const form     = e.target;
+    const nombre   = form.nombre.value.trim();
+    const apellidos= form.apellidos.value.trim();
+    const email    = form.email.value.trim();
+    const telefono = form.telefono.value.trim();
+    const direccion= form.direccion.value.trim();
+    const ciudad   = form.ciudad.value.trim();
+    const cp       = form.codigo_postal.value.trim();
+
+    try {
+      // PASO 1: Crear PaymentIntent en el backend
+      const items = carrito.map(item => ({
+        productId: PRODUCT_MAP[item.name] || 'accesorios',
+        quantity:  item.quantity || 1,
+      }));
+
+      const intentRes = await fetch(`${BACKEND_URL}/crear-payment-intent`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          customerEmail: email,
+          discountCode:  codigoDescuento || undefined,
+          metadata: { nombre, apellidos, telefono, direccion, ciudad, cp },
+        }),
+      });
+
+      if (!intentRes.ok) {
+        const { error } = await intentRes.json();
+        throw new Error(error || 'Error al crear el pago.');
+      }
+
+      const { clientSecret, paymentIntentId, amountFormatted } = await intentRes.json();
+
+      // PASO 2: Confirmar pago con Stripe Elements
+      setStatus('🔐 Verificando con Stripe...', '');
+      const { paymentIntent, error: stripeError } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name:  `${nombre} ${apellidos}`,
+              email,
+              phone: telefono,
+              address: {
+                line1:       direccion,
+                city:        ciudad,
+                postal_code: cp,
+                country:     'ES',
+              },
+            },
+          },
+        }
+      );
+
+      if (stripeError) throw new Error(stripeError.message);
+
+      if (paymentIntent.status === 'succeeded') {
+        // PASO 3: Notificar a n8n (con fallback silencioso)
+        fetch(N8N_WEBHOOK, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            accion: 'compra',
+            customer: {
+              nombre, apellidos, email, telefono,
+              direccion, ciudad, codigo_postal: cp,
+              payment_method: 'card',
+            },
+            items: carrito.map(i => ({
+              name:     i.name,
+              price:    i.price,
+              quantity: i.quantity || 1,
+            })),
+            total:        parseFloat(amountFormatted),
+            discount:     codigoDescuento || 'Ninguno',
+            paymentMethod: 'card',
+            stripe_payment_intent_id: paymentIntent.id,
+            stripe_status: paymentIntent.status,
+          }),
+        }).catch(err => console.warn('n8n webhook falló (pago OK):', err.message));
+
+        // Limpiar carrito y redirigir
+        localStorage.removeItem('cart');
+        setStatus('✅ ¡Pago completado! Redirigiendo...', 'ok');
+        setTimeout(() => {
+          window.location.href = `index.html?pedido=${paymentIntent.id}`;
+        }, 2000);
+      }
+
+    } catch (err) {
+      document.getElementById('card-errors').textContent = err.message;
+      setStatus('', '');
+      btn.disabled    = false;
+      btn.textContent = 'Pagar ahora';
+    }
+  });
+
+  function setStatus(msg, tipo) {
+    const el      = document.getElementById('pay-status');
+    el.textContent = msg;
+    el.className   = tipo;
+  }
+  </script>
+
 </body>
 </html>
